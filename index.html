@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS Variables - Dreamy Pastel Palette matching the image */
+        /* CSS Variables - Dreamy Pastel Palette matching the images */
         :root {
             --bg-gradient: linear-gradient(135deg, #18091a 0%, #311326 35%, #501d36 70%, #290f23 100%);
             --glass-bg: rgba(255, 255, 255, 0.03);
@@ -123,7 +123,7 @@
         /* Navigation Links in Pill Header */
         .pill-nav {
             display: flex;
-            gap: 2rem;
+            gap: 2.2rem;
             align-items: center;
         }
         .pill-nav-link {
@@ -283,20 +283,10 @@
             left: -50px;
         }
 
-        /* Cards/Lessons Section */
-        .content-sections {
-            margin-top: 3rem;
-            margin-bottom: 8rem; /* Space for the bottom dock */
-        }
+        /* Sections Workspace Panels */
         .section-panel {
             display: none;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 3rem;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            background: transparent;
             animation: panelFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .section-panel.active {
@@ -307,39 +297,165 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        .panel-header {
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 1.5rem;
+        /* --- WEEKLY CARDS GRID SECTION (EXACT DESIGN FROM IMAGES) --- */
+        .assignments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.2rem;
+            margin-top: 1rem;
+            margin-bottom: 5rem;
         }
-        .panel-title {
-            font-family: var(--font-display);
-            font-size: 2.2rem;
-            color: #fff;
-            margin-top: 0.5rem;
+        
+        .homework-card {
+            background: #fffcf5; /* Warm off-white card body matching images */
+            border: 1px solid rgba(217, 126, 166, 0.15);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(18, 5, 15, 0.05);
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
         }
-        .panel-week {
-            font-family: var(--font-sans);
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            color: var(--accent-pink);
-            letter-spacing: 2px;
-            font-weight: 600;
+        .homework-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 18px 45px rgba(217, 126, 166, 0.18);
+            border-color: rgba(217, 126, 166, 0.3);
         }
 
-        /* Specific styles for interactive cards within panels */
+        /* Header Illustration (Botanical Whimsy Style with Dynamic Pastel SVGs) */
+        .card-illustration {
+            height: 155px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Botanical illustration badges */
+        .illus-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(217, 126, 166, 0.2);
+            color: #d04a7c;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 5;
+        }
+
+        /* Card Content Styling */
+        .card-body {
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            background: #fffcf5;
+        }
+        .card-tag {
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #df5e88; /* Soft red warmth text */
+        }
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2b182d; /* Elegant deep dark color */
+            line-height: 1.4;
+        }
+        .card-desc {
+            font-family: var(--font-sans);
+            font-size: 0.88rem;
+            color: #6a566c; /* Soft dark muted text */
+            line-height: 1.6;
+        }
+
+        /* --- DETAILED MODAL OVERLAYS (TAB DETAILS POPPING UP ON CARD CLICK) --- */
+        .detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 5, 15, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+        .detail-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background: var(--bg-gradient);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.8rem;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 55px rgba(0, 0, 0, 0.6);
+            transform: translateY(30px);
+            transition: var(--transition);
+            position: relative;
+        }
+        .detail-modal.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 100;
+        }
+        .modal-close-btn:hover {
+            color: var(--accent-pink);
+            background: rgba(255,255,255,0.1);
+            transform: rotate(90deg);
+        }
+
+        /* Layout Elements inside modals */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 2.5rem;
         }
-        @media (max-width: 900px) {
-            .grid-2, .hero-section {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 800px) {
+            .grid-2 { grid-template-columns: 1fr; gap: 1.5rem; }
         }
 
-        /* Week 1: Interactive File System Simulator */
+        /* Interactive File System Card (Week 1 detail) */
         .file-sys-card {
             background: rgba(0,0,0,0.2);
             border-radius: 16px;
@@ -364,18 +480,20 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
             color: #fff;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.8rem;
+            text-align: left;
             transition: var(--transition);
+            width: 100%;
         }
         .file-operation-btn:hover {
             background: var(--accent-pink);
             border-color: var(--accent-pink);
         }
 
-        /* Week 3: Interactive Prompt Switcher */
+        /* Prompt engineering (Week 3 detail) */
         .prompt-version-box {
             display: flex;
             flex-direction: column;
@@ -414,7 +532,7 @@
             min-height: 120px;
         }
 
-        /* Week 4: Dreamy Trello Kanban Simulator */
+        /* Kanban columns (Week 4 detail) */
         .kanban-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -456,7 +574,7 @@
             border-color: var(--accent-pink);
         }
 
-        /* Week 5: Infographic Contribution Ring */
+        /* Infographics percentage donut (Week 5 detail) */
         .infographic-wrapper {
             display: flex;
             align-items: center;
@@ -490,17 +608,18 @@
             text-transform: uppercase;
         }
 
-        /* Week 6: Golden Rules Web */
+        /* Golden rules (Week 6 detail) */
         .rules-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
         }
         .rule-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.2rem;
             text-align: center;
             transition: var(--transition);
         }
@@ -508,101 +627,23 @@
             transform: translateY(-5px);
             background: rgba(217, 126, 166, 0.05);
             border-color: var(--accent-pink);
-            box-shadow: 0 10px 25px rgba(217, 126, 166, 0.1);
         }
         .rule-num {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: var(--accent-pink);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
             font-family: var(--font-display);
         }
 
-        /* Bottom Floating Dock Navigation */
-        .bottom-dock-container {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 999;
-            width: 90%;
-            max-width: 650px;
-        }
-        .bottom-dock {
-            background: rgba(30, 13, 26, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 40px;
-            padding: 0.6rem 1.2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 
-                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            transition: var(--transition);
-        }
-        .bottom-dock:hover {
-            border-color: rgba(217, 126, 166, 0.3);
-            box-shadow: 0 20px 45px rgba(217, 126, 166, 0.15);
-        }
-        .dock-item {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            transition: var(--transition);
-        }
-        .dock-item i {
-            font-size: 1.1rem;
-        }
-        .dock-item:hover {
-            color: var(--accent-pink);
-            transform: scale(1.15) translateY(-4px);
-            background: rgba(255, 255, 255, 0.05);
-        }
-        .dock-item.active {
-            color: #fff;
-            background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
-            box-shadow: 0 8px 20px var(--accent-glow);
-            transform: scale(1.1) translateY(-6px);
-        }
-        .dock-tooltip {
-            position: absolute;
-            bottom: 60px;
-            background: rgba(18, 5, 15, 0.9);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            padding: 0.4rem 0.8rem;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(10px);
-            transition: var(--transition);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        .dock-item:hover .dock-tooltip {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Contact Info Modal Overlay */
+        /* Contact modal styling */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(18, 5, 15, 0.7);
+            background: rgba(18, 5, 15, 0.75);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             z-index: 10000;
@@ -627,6 +668,7 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             transform: translateY(30px);
             transition: var(--transition);
+            position: relative;
         }
         .modal-overlay.active .contact-modal {
             transform: translateY(0);
@@ -675,7 +717,6 @@
             <nav class="pill-nav">
                 <span class="pill-nav-link active" onclick="switchHeaderTab('home', this)">Giới Thiệu</span>
                 <span class="pill-nav-link" onclick="switchHeaderTab('week1', this)">Bài Tập</span>
-                <span class="pill-nav-link" onclick="switchHeaderTab('week6', this)">Tổng Kết</span>
                 <span class="pill-nav-link" onclick="openContactModal()">Liên Hệ</span>
             </nav>
             
@@ -723,249 +764,359 @@
                 </div>
             </div>
 
-            <!-- WEEK 1 PANEL -->
+            <!-- --- WEEKLY CARDS OVERVIEW PANEL (BÀI TẬP SECTION) --- -->
             <div id="panel-week1" class="section-panel">
-                <div class="panel-header">
-                    <span class="panel-week">Tuần 1 &bull; Bài tập 1</span>
-                    <h2 class="panel-title">Thao tác Tệp tin & Thư mục</h2>
+                <div style="margin-bottom: 2rem;">
+                    <span class="tagline">Danh mục học tập</span>
+                    <h2 style="font-family: var(--font-display); font-size: 2.2rem; color: #fff; margin-top: 0.5rem;">Các bài tập thực hành số</h2>
+                    <p class="desc-text" style="max-width: 600px; margin-top: 0.5rem;">Nhấp vào từng thẻ bài tập học phần dưới đây để khám phá chi tiết báo cáo và các hệ thống tương tác số hóa mô phỏng.</p>
                 </div>
-                <div class="grid-2">
-                    <div>
-                        <p class="desc-text">
-                            Tại tuần đầu tiên, tôi đã thực hành quy chuẩn cấu trúc hóa không gian lưu trữ cá nhân thông qua 12 bước thao tác chuyên nghiệp trên ổ đĩa <span class="highlight">D:</span>. 
-                        </p>
-                        <p class="desc-text">
-                            Hành động này giúp tối ưu hóa luồng công việc, hình thành thói quen tổ chức dữ liệu khoa học, gọn gàng, giảm thiểu thời gian tìm kiếm tài liệu học tập sau này.
-                        </p>
-                        <div class="file-sys-card" style="margin-top: 1.5rem;">
-                            <div class="terminal-header">
-                                <span class="dot dot-red"></span>
-                                <span class="dot dot-yellow"></span>
-                                <span class="dot dot-green"></span>
-                            </div>
-                            <div style="color: #a6e22e; margin-bottom: 0.5rem;">$ cd D:/ThucHanh_PhungLeHienAnh</div>
-                            <div style="color: #f8f8f2;" id="file-simulator-status">Trạng thái: Thư mục trống</div>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 style="margin-bottom: 1rem; color: #fff;">Mô phỏng 12 bước hành động</h4>
-                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                            <button class="file-operation-btn" onclick="runFileStep(1)"><i class="fa-solid fa-folder-plus"></i> Bước 3: Tạo thư mục gốc ThucHanh_PhungLeHienAnh</button>
-                            <button class="file-operation-btn" onclick="runFileStep(2)"><i class="fa-solid fa-file-signature"></i> Bước 5 & 6: Khởi tạo & Đổi tên GhiChuQuanTrong.txt</button>
-                            <button class="file-operation-btn" onclick="runFileStep(3)"><i class="fa-solid fa-copy"></i> Bước 8: Sao chép file vào thư mục TaiLieu</button>
-                            <button class="file-operation-btn" onclick="runFileStep(4)"><i class="fa-solid fa-trash-can"></i> Bước 11 & 12: Xóa vĩnh viễn DiChuyen.txt & Khôi phục GhiChuQuanTrong.txt</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- WEEK 2 PANEL -->
-            <div id="panel-week2" class="section-panel">
-                <div class="panel-header">
-                    <span class="panel-week">Tuần 2 &bull; Bài tập 2</span>
-                    <h2 class="panel-title">Chiến lược Tìm kiếm Thông tin & Đánh giá nguồn tin</h2>
-                </div>
-                <div class="grid-2">
-                    <div>
-                        <p class="desc-text">
-                            Tôi đã tiến hành xây dựng một ma trận từ khóa đa chiều bằng cả tiếng Anh và tiếng Việt nhằm phục vụ nghiên cứu đề tài: <span class="highlight">"Tác động của AI đối với việc học tiếng Anh"</span>.
-                        </p>
-                        <p class="desc-text">
-                            Sử dụng các toán tử tìm kiếm nâng cao (Boolean <span class="highlight">AND, OR</span>, truy vấn chính xác <span class="highlight">""</span>, giới hạn trường <span class="highlight">site:, intitle:</span>) để lọc ra 10 nguồn tài liệu học thuật cốt lõi. 
-                        </p>
-                        <div style="background: rgba(0,0,0,0.15); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--glass-border);">
-                            <h5 style="color: var(--accent-pink); margin-bottom: 0.5rem; font-size: 0.9rem;">Cú pháp tối ưu hóa tìm kiếm học thuật:</h5>
-                            <code style="color: #e6db74; font-size: 0.85rem; word-break: break-all;">
-                                "Artificial Intelligence" AND ("English language teaching" OR "language learning") AND "Vietnamese"
-                            </code>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 style="color:#fff; margin-bottom:1rem;">Khung thẩm định 5 tiêu chí</h4>
-                        <p class="desc-text" style="font-size:0.85rem;">
-                            1. <strong style="color: #fff;">Tác giả:</strong> Học hàm, học vị, lĩnh vực chuyên môn sâu.<br>
-                            2. <strong style="color: #fff;">Cơ quan xuất bản:</strong> Các nhà xuất bản uy tín (Cambridge, Oxford, Elsevier).<br>
-                            3. <strong style="color: #fff;">Phương pháp luận:</strong> Tính thực nghiệm, tính khoa học, cấu trúc mẫu rõ ràng.<br>
-                            4. <strong style="color: #fff;">Trích dẫn:</strong> Chỉ số ảnh hưởng học thuật (Scopus, Google Scholar).<br>
-                            5. <strong style="color: #fff;">Tính cập nhật:</strong> Ưu tiên công trình giai đoạn 2023 - 2026 (Kỷ nguyên Generative AI).
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- WEEK 3 PANEL -->
-            <div id="panel-week3" class="section-panel">
-                <div class="panel-header">
-                    <span class="panel-week">Tuần 3 &bull; Bài tập 2</span>
-                    <h2 class="panel-title">Kỹ nghệ thiết kế Prompt (Prompt Engineering)</h2>
-                </div>
-                <div class="grid-2">
-                    <div>
-                        <p class="desc-text">
-                            Tôi đã tiến hành thử nghiệm so sánh 3 cấp độ viết câu lệnh (Cơ bản, Cải tiến, Nâng cao) thông qua 3 tác vụ tự học của sinh viên năm nhất: 
-                            <span class="highlight">Tóm tắt tài liệu học thuật</span>, 
-                            <span class="highlight">Giải thích thuật ngữ Morphology</span> và 
-                            <span class="highlight">Tạo đề thi trắc nghiệm phân hóa</span>.
-                        </p>
-                        <p class="desc-text">
-                            Kết quả chứng minh rõ ràng: Khi áp dụng kỹ thuật <strong style="color:#fff;">Role Prompting, Chain-of-Thought</strong> và <strong style="color:#fff;">Few-shot Examples</strong>, đầu ra của AI giảm thiểu tỷ lệ "ảo tưởng" và có giá trị sư phạm vượt bậc.
-                        </p>
-                    </div>
-                    <div class="prompt-version-box">
-                        <div class="prompt-tabs">
-                            <button class="prompt-tab active" onclick="switchPrompt(this, 'basic')">Cơ bản</button>
-                            <button class="prompt-tab" onclick="switchPrompt(this, 'improved')">Cải tiến</button>
-                            <button class="prompt-tab" onclick="switchPrompt(this, 'advanced')">Nâng cao</button>
-                        </div>
-                        <div class="prompt-display" id="prompt-content-view">
-                            "Giải thích khái niệm Morphology trong tiếng Anh."
-                        </div>
-                        <p id="prompt-result-desc" style="font-size: 0.8rem; color: var(--accent-pink); font-style: italic;">
-                            *Đầu ra AI: Định nghĩa rập khuôn, lý thuyết bách khoa khó hiểu đối với sinh viên năm nhất.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- WEEK 4 PANEL -->
-            <div id="panel-week4" class="section-panel">
-                <div class="panel-header">
-                    <span class="panel-week">Tuần 4 &bull; Bài tập 3</span>
-                    <h2 class="panel-title">Hợp tác trực tuyến & Quản trị Dự án nhóm</h2>
-                </div>
-                <div>
-                    <p class="desc-text">
-                        Đóng vai trò là trưởng mảng tiến độ và quản lý không gian lưu trữ số cho dự án nhóm: <span class="highlight">"Khảo sát xu hướng ứng dụng công nghệ số tự học kỹ năng Nghe - Nói tại ULIS"</span>, tôi đã thiết lập hệ sinh thái làm việc đồng bộ:
-                    </p>
-                    <div class="kanban-board">
-                        <div class="kanban-col">
-                            <div class="kanban-col-title">Trello (Kanban) <i class="fa-solid fa-list-check"></i></div>
-                            <div class="kanban-card">Thiết kế Slide / Infographic</div>
-                            <div class="kanban-card" style="border-left: 3px solid var(--accent-pink);">Review và chốt kịch bản Final</div>
-                        </div>
-                        <div class="kanban-col">
-                            <div class="kanban-col-title">Google Docs <i class="fa-regular fa-file-lines"></i></div>
-                            <div class="kanban-card">Biên soạn nội dung đề cương chương 2</div>
-                            <div class="kanban-card">Sửa lỗi định dạng, góp ý văn phong khoa học</div>
-                        </div>
-                        <div class="kanban-col">
-                            <div class="kanban-col-title">Google Drive & Discord <i class="fa-solid fa-network-wired"></i></div>
-                            <div class="kanban-card">Phân cấp thư mục, kiểm soát cấu trúc lưu trữ</div>
-                            <div class="kanban-card">Setup Trello Bot thông báo tự động sang Discord</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- WEEK 5 PANEL -->
-            <div id="panel-week5" class="section-panel">
-                <div class="panel-header">
-                    <span class="panel-week">Tuần 5 &bull; Bài tập 2</span>
-                    <h2 class="panel-title">Sáng tạo nội dung truyền thông bằng Generative AI</h2>
-                </div>
-                <div class="grid-2">
-                    <div>
-                        <p class="desc-text">
-                            Tôi đã phối hợp đồng bộ 3 công cụ AI để thiết kế bộ ấn phẩm truyền thông chuyên nghiệp: <span class="highlight">"Phương pháp học từ vựng tiếng Anh qua sơ đồ tư duy kỹ thuật số"</span>.
-                        </p>
-                        <p class="desc-text">
-                            - <strong style="color: #fff;">Google Gemini:</strong> Đóng vai trò trợ lý cấu trúc khung bài thuyết trình.<br>
-                            - <strong style="color: #fff;">Banana Pro:</strong> Tạo dựng mô hình biểu tượng 3D não bộ kết nối học thuật.<br>
-                            - <strong style="color: #fff;">Canva AI (Magic Design):</strong> Đề xuất bố cục, điều chỉnh phông chữ Unicode đồng bộ.
-                        </p>
-                    </div>
-                    <div class="infographic-wrapper">
-                        <div class="donut-chart">
-                            <svg class="chart-svg" width="180" height="180" viewBox="0 0 36 36">
-                                <path class="chart-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#221120" stroke-width="3" />
-                                <path class="chart-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#pinkGrad)" stroke-width="3" stroke-dasharray="60, 100" />
-                                <defs>
-                                    <linearGradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#d97ea6" />
-                                        <stop offset="100%" stop-color="#9a66ac" />
-                                    </linearGradient>
-                                </defs>
+                <!-- 6 Lessons Grid modeled exactly after image -->
+                <div class="assignments-grid">
+                    <!-- Card 01 -->
+                    <div class="homework-card" onclick="openDetailModal('week1-modal')">
+                        <div class="card-illustration" style="background: linear-gradient(135deg, #e0f2f1, #b2dfdb);">
+                            <span class="illus-badge">Bài 01</span>
+                            <!-- Pure SVG botanical whimsy background pattern -->
+                            <svg viewBox="0 0 300 155" style="width: 100%; height: 100%; opacity: 0.45; fill: #00796b;">
+                                <path d="M30 110 C 50 80, 80 80, 110 110 M110 110 C 130 80, 160 80, 180 110 M150 50 Q 180 20, 210 50 T 270 50" stroke="#004d40" stroke-width="1.5" fill="none"/>
+                                <circle cx="50" cy="40" r="3" /> <circle cx="250" cy="90" r="4" />
+                                <circle cx="120" cy="30" r="2" /> <path d="M 220,100 Q 240,120 260,100" stroke="#004d40" stroke-width="1.2" fill="none"/>
                             </svg>
-                            <div class="chart-number">
-                                <div class="chart-val">60%</div>
-                                <div class="chart-lbl">Chất xám Con người</div>
-                            </div>
                         </div>
-                        <div style="flex: 1;">
-                            <h5 style="color:#fff; margin-bottom: 0.5rem;">Sự kết hợp giữa AI và Đóng góp cá nhân</h5>
-                            <p class="desc-text" style="font-size:0.85rem;">
-                                Đầu ra của AI chỉ chiếm dưới <span class="highlight">40%</span>. Tôi trực tiếp rà soát, tinh giản 40% chữ thừa từ AI, chỉnh sửa lỗi phông tiếng Việt, căn lề thủ công để thổi hồn vào tác phẩm Infographic hoàn thiện.
-                            </p>
+                        <div class="card-body">
+                            <span class="card-tag">Quản trị hệ thống</span>
+                            <h3 class="card-title">Thao tác cơ bản với tệp tin và thư mục</h3>
+                            <p class="card-desc">Tìm hiểu cấu trúc thư mục, hệ thống quản lý tệp tin và thiết lập phân quyền an toàn dữ liệu học tập cá nhân.</p>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- WEEK 6 PANEL (Ethics & Rules) -->
-            <div id="panel-week6" class="section-panel">
-                <div class="panel-header">
-                    <span class="panel-week">Tuần 6 &bull; Bài tập 4</span>
-                    <h2 class="panel-title">Chính sách AI & Đạo đức học thuật số</h2>
-                </div>
-                <div>
-                    <p class="desc-text" style="margin-bottom: 2rem;">
-                        Trong quá trình học thuật, tôi luôn nghiêm ngặt tuân thủ và vận dụng bộ khung chính sách sử dụng AI có trách nhiệm của các cơ sở giáo dục. Tôi đã tổng hợp thành <span class="highlight">05 nguyên tắc vàng</span> cốt lõi trong sơ đồ tư duy đạo đức học thuật của riêng mình:
-                    </p>
-                    <div class="rules-grid">
-                        <div class="rule-card">
-                            <div class="rule-num">01</div>
-                            <h4 style="color:#fff; margin-bottom:0.5rem;">Nguyên bản</h4>
-                            <p class="desc-text" style="font-size:0.8rem; margin:0;">Tự tư duy và hình thành quan điểm độc lập trước khi tìm kiếm gợi ý từ AI.</p>
+                    <!-- Card 02 -->
+                    <div class="homework-card" onclick="openDetailModal('week2-modal')">
+                        <div class="card-illustration" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb);">
+                            <span class="illus-badge">Bài 02</span>
+                            <svg viewBox="0 0 300 155" style="width: 100%; height: 100%; opacity: 0.45; fill: #0d47a1;">
+                                <path d="M10 120 Q 50 50, 100 120 T 190 120 T 280 120" stroke="#0d47a1" stroke-width="1.5" fill="none"/>
+                                <circle cx="80" cy="50" r="3" /> <circle cx="220" cy="40" r="5" />
+                                <path d="M150 20 L 155 35 L 170 35 L 158 45 L 162 60 L 150 50 L 138 60 L 142 45 L 130 35 L 145 35 Z" fill="#bbdefb" stroke="#0d47a1" stroke-width="1"/>
+                            </svg>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-num">02</div>
-                            <h4 style="color:#fff; margin-bottom:0.5rem;">Minh bạch</h4>
-                            <p class="desc-text" style="font-size:0.8rem; margin:0;">Chủ động công khai mức độ và danh mục các công cụ AI hỗ trợ trong nghiên cứu.</p>
+                        <div class="card-body">
+                            <span class="card-tag">Nghiên cứu khoa học</span>
+                            <h3 class="card-title">Tìm kiếm và đánh giá thông tin học thuật</h3>
+                            <p class="card-desc">Sử dụng các cú pháp tìm kiếm nâng cao (Google Scholar, JSTOR...) và phương pháp sàng lọc tài liệu học thuật uy tín.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-num">03</div>
-                            <h4 style="color:#fff; margin-bottom:0.5rem;">Thẩm định</h4>
-                            <p class="desc-text" style="font-size:0.8rem; margin:0;">Xác thực lại toàn bộ dữ liệu, nguồn dẫn do AI cung cấp bằng tài liệu chính thống.</p>
+                    </div>
+
+                    <!-- Card 03 -->
+                    <div class="homework-card" onclick="openDetailModal('week3-modal')">
+                        <div class="card-illustration" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7);">
+                            <span class="illus-badge">Bài 03</span>
+                            <svg viewBox="0 0 300 155" style="width: 100%; height: 100%; opacity: 0.45; fill: #4a148c;">
+                                <path d="M50 140 Q 150 20, 250 140" stroke="#4a148c" stroke-width="1.8" fill="none"/>
+                                <circle cx="150" cy="60" r="8" fill="none" stroke="#4a148c" stroke-width="1.5"/>
+                                <circle cx="150" cy="60" r="2" /> <circle cx="90" cy="80" r="3" /> <circle cx="210" cy="80" r="3" />
+                            </svg>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-num">04</div>
-                            <h4 style="color:#fff; margin-bottom:0.5rem;">Kiểm soát</h4>
-                            <p class="desc-text" style="font-size:0.8rem; margin:0;">Giữ vai trò "chủ đạo" của con người với tỷ lệ chất xám đóng góp trên 70%.</p>
+                        <div class="card-body">
+                            <span class="card-tag">Prompt Engineering</span>
+                            <h3 class="card-title">Viết Prompt hiệu quả cho các tác vụ học tập</h3>
+                            <p class="card-desc">Nghiên cứu các cấu trúc câu lệnh (Prompt) nâng cao để yêu cầu AI hỗ trợ học từ vựng, dịch thuật và phân tích bài luận.</p>
                         </div>
-                        <div class="rule-card">
-                            <div class="rule-num">05</div>
-                            <h4 style="color:#fff; margin-bottom:0.5rem;">Phát triển</h4>
-                            <p class="desc-text" style="font-size:0.8rem; margin:0;">Sử dụng công nghệ làm bàn đạp mài sắc tư duy phản biện, tránh ỷ lại vô điều kiện.</p>
+                    </div>
+
+                    <!-- Card 04 -->
+                    <div class="homework-card" onclick="openDetailModal('week4-modal')">
+                        <div class="card-illustration" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                            <span class="illus-badge">Bài 04</span>
+                            <svg viewBox="0 0 300 155" style="width: 100%; height: 100%; opacity: 0.45; fill: #1b5e20;">
+                                <path d="M20 50 Q 80 120, 150 50 T 280 50" stroke="#1b5e20" stroke-width="1.5" fill="none"/>
+                                <circle cx="60" cy="100" r="4" /> <circle cx="240" cy="100" r="4" />
+                                <path d="M 130 110 C 140 100, 160 100, 170 110" stroke="#1b5e20" stroke-width="1.2" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Hợp tác số</span>
+                            <h3 class="card-title">Sử dụng AI hỗ trợ làm việc nhóm</h3>
+                            <p class="card-desc">Phân chia nhiệm vụ, quản lý tiến độ và viết tài liệu nhóm chung với sự tối ưu hóa toàn diện từ AI.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 05 -->
+                    <div class="homework-card" onclick="openDetailModal('week5-modal')">
+                        <div class="card-illustration" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);">
+                            <span class="illus-badge">Bài 05</span>
+                            <svg viewBox="0 0 300 155" style="width: 100%; height: 100%; opacity: 0.45; fill: #e65100;">
+                                <path d="M40 40 L 260 40 L 260 120 L 40 120 Z" stroke="#e65100" stroke-width="1.2" fill="none"/>
+                                <path d="M70 100 C 100 60, 130 60, 160 100 M160 100 C 190 70, 210 70, 230 100" stroke="#e65100" stroke-width="1.5" fill="none"/>
+                                <circle cx="110" cy="65" r="7" fill="#ffe0b2" stroke="#e65100" stroke-width="1.2"/>
+                            </svg>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Sáng tạo nội dung</span>
+                            <h3 class="card-title">Sử dụng AI tạo sinh để sáng tạo nội dung</h3>
+                            <p class="card-desc">Tạo hình ảnh minh họa bằng khuếch tán và biên soạn kịch bản giới thiệu phương pháp học từ vựng qua sơ đồ tư duy kỹ thuật số.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 06 -->
+                    <div class="homework-card" onclick="openDetailModal('week6-modal')">
+                        <div class="card-illustration" style="background: linear-gradient(135deg, #ffebee, #ffcdd2);">
+                            <span class="illus-badge">Bài 06</span>
+                            <svg viewBox="0 0 300 155" style="width: 100%; height: 100%; opacity: 0.45; fill: #b71c1c;">
+                                <circle cx="150" cy="75" r="30" fill="none" stroke="#b71c1c" stroke-width="1.5"/>
+                                <path d="M120 75 L 180 75 M150 45 L 150 105" stroke="#b71c1c" stroke-width="1.5"/>
+                                <circle cx="100" cy="40" r="3" /> <circle cx="200" cy="40" r="3" />
+                                <circle cx="100" cy="110" r="3" /> <circle cx="200" cy="110" r="3" />
+                            </svg>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-tag">Đạo đức học thuật</span>
+                            <h3 class="card-title">Sử dụng AI có trách nhiệm trong học tập</h3>
+                            <p class="card-desc">Nguyên tắc liêm chính học thuật, phòng chống đạo văn và cách ghi nguồn, trích dẫn chuẩn hóa khi làm việc với AI.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
+    </div>
 
-        <!-- Bottom macOS Style Floating Navigation Dock (For Weeks Swapping) -->
-        <div class="bottom-dock-container" id="bottom-dock-bar" style="display: none;">
-            <nav class="bottom-dock">
-                <button class="dock-item active" id="dock-w1" onclick="switchPanel('week1', this)">
-                    <i class="fa-solid fa-folder"></i>
-                    <span class="dock-tooltip">T1: File & Folder</span>
-                </button>
-                <button class="dock-item" onclick="switchPanel('week2', this)">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <span class="dock-tooltip">T2: Tìm kiếm</span>
-                </button>
-                <button class="dock-item" onclick="switchPanel('week3', this)">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span class="dock-tooltip">T3: Prompt Eng</span>
-                </button>
-                <button class="dock-item" onclick="switchPanel('week4', this)">
-                    <i class="fa-solid fa-users-gear"></i>
-                    <span class="dock-tooltip">T4: Dự án nhóm</span>
-                </button>
-                <button class="dock-item" onclick="switchPanel('week5', this)">
-                    <i class="fa-solid fa-palette"></i>
-                    <span class="dock-tooltip">T5: Sáng tạo AI</span>
-                </button>
-            </nav>
+    <!-- --- DETAILED INTERACTIVE MODALS FOR EACH WEEK --- -->
+
+    <!-- Week 1 Detail Modal -->
+    <div class="detail-modal" id="week1-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeDetailModal('week1-modal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="panel-header">
+                <span class="panel-week">Tuần 1 &bull; Thao tác Tệp tin & Thư mục</span>
+                <h2 class="panel-title" style="color: #fff;">Mô phỏng 12 bước hành động</h2>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <p class="desc-text">
+                        Tại tuần đầu tiên, tôi đã thực hành quy chuẩn cấu trúc hóa không gian lưu trữ cá nhân thông qua 12 bước thao tác chuyên nghiệp trên ổ đĩa <span class="highlight">D:</span>. 
+                    </p>
+                    <p class="desc-text">
+                        Hành động này giúp tối ưu hóa luồng công việc, hình thành thói quen tổ chức dữ liệu khoa học, gọn gàng, giảm thiểu thời gian tìm kiếm tài liệu học tập sau này.
+                    </p>
+                    <div class="file-sys-card" style="margin-top: 1.5rem;">
+                        <div class="terminal-header">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <div style="color: #a6e22e; margin-bottom: 0.5rem;">$ cd D:/ThucHanh_PhungLeHienAnh</div>
+                        <div style="color: #f8f8f2;" id="file-simulator-status">Trạng thái: Thư mục trống</div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 1rem; color: #fff;">Click để chạy các thao tác:</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                        <button class="file-operation-btn" onclick="runFileStep(1)"><i class="fa-solid fa-folder-plus"></i> Bước 3: Tạo thư mục gốc ThucHanh_PhungLeHienAnh</button>
+                        <button class="file-operation-btn" onclick="runFileStep(2)"><i class="fa-solid fa-file-signature"></i> Bước 5 & 6: Khởi tạo & Đổi tên GhiChuQuanTrong.txt</button>
+                        <button class="file-operation-btn" onclick="runFileStep(3)"><i class="fa-solid fa-copy"></i> Bước 8: Sao chép file vào thư mục TaiLieu</button>
+                        <button class="file-operation-btn" onclick="runFileStep(4)"><i class="fa-solid fa-trash-can"></i> Bước 11 & 12: Xóa vĩnh viễn DiChuyen.txt & Khôi phục file</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week 2 Detail Modal -->
+    <div class="detail-modal" id="week2-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeDetailModal('week2-modal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="panel-header">
+                <span class="panel-week">Tuần 2 &bull; Tìm kiếm và Đánh giá nguồn tin</span>
+                <h2 class="panel-title" style="color: #fff;">Chiến lược Tìm kiếm Thông tin</h2>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <p class="desc-text">
+                        Tôi đã tiến hành xây dựng một ma trận từ khóa đa chiều bằng cả tiếng Anh và tiếng Việt nhằm phục vụ nghiên cứu đề tài: <span class="highlight">"Tác động của AI đối với việc học tiếng Anh"</span>.
+                    </p>
+                    <p class="desc-text">
+                        Sử dụng các toán tử tìm kiếm nâng cao (Boolean <span class="highlight">AND, OR</span>, truy vấn chính xác <span class="highlight">""</span>, giới hạn trường <span class="highlight">site:, intitle:</span>) để lọc ra 10 nguồn tài liệu học thuật cốt lõi. 
+                    </p>
+                    <div style="background: rgba(0,0,0,0.15); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--glass-border); margin-top: 1rem;">
+                        <h5 style="color: var(--accent-pink); margin-bottom: 0.5rem; font-size: 0.9rem;">Cú pháp tối ưu hóa tìm kiếm học thuật:</h5>
+                        <code style="color: #e6db74; font-size: 0.85rem; word-break: break-all;">
+                            "Artificial Intelligence" AND ("English language teaching" OR "language learning") AND "Vietnamese"
+                        </code>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color:#fff; margin-bottom:1rem;">Khung thẩm định 5 tiêu chí</h4>
+                    <p class="desc-text" style="font-size:0.85rem;">
+                        1. <strong style="color: #fff;">Tác giả:</strong> Học hàm, học vị, lĩnh vực chuyên môn sâu.<br>
+                        2. <strong style="color: #fff;">Cơ quan xuất bản:</strong> Các nhà xuất bản uy tín (Cambridge, Oxford, Elsevier).<br>
+                        3. <strong style="color: #fff;">Phương pháp luận:</strong> Tính thực nghiệm, tính khoa học, cấu trúc mẫu rõ ràng.<br>
+                        4. <strong style="color: #fff;">Trích dẫn:</strong> Chỉ số ảnh hưởng học thuật (Scopus, Google Scholar).<br>
+                        5. <strong style="color: #fff;">Tính cập nhật:</strong> Ưu tiên công trình giai đoạn 2023 - 2026 (Kỷ nguyên Generative AI).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week 3 Detail Modal -->
+    <div class="detail-modal" id="week3-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeDetailModal('week3-modal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="panel-header">
+                <span class="panel-week">Tuần 3 &bull; Prompt Engineering</span>
+                <h2 class="panel-title" style="color: #fff;">Thiết kế câu lệnh học tập tối ưu</h2>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <p class="desc-text">
+                        Tôi đã tiến hành thử nghiệm so sánh 3 cấp độ viết câu lệnh (Cơ bản, Cải tiến, Nâng cao) thông qua 3 tác vụ tự học của sinh viên năm nhất: 
+                        <span class="highlight">Tóm tắt tài liệu học thuật</span>, 
+                        <span class="highlight">Giải thích thuật ngữ Morphology</span> và 
+                        <span class="highlight">Tạo đề thi trắc nghiệm phân hóa</span>.
+                    </p>
+                    <p class="desc-text">
+                        Kết quả chứng minh rõ ràng: Khi áp dụng kỹ thuật <strong style="color:#fff;">Role Prompting, Chain-of-Thought</strong> và <strong style="color:#fff;">Few-shot Examples</strong>, đầu ra của AI giảm thiểu tỷ lệ "ảo tưởng" và có giá trị sư phạm vượt bậc.
+                    </p>
+                </div>
+                <div class="prompt-version-box">
+                    <div class="prompt-tabs">
+                        <button class="prompt-tab active" onclick="switchPrompt(this, 'basic')">Cơ bản</button>
+                        <button class="prompt-tab" onclick="switchPrompt(this, 'improved')">Cải tiến</button>
+                        <button class="prompt-tab" onclick="switchPrompt(this, 'advanced')">Nâng cao</button>
+                    </div>
+                    <div class="prompt-display" id="prompt-content-view">
+                        "Giải thích khái niệm Morphology trong tiếng Anh."
+                    </div>
+                    <p id="prompt-result-desc" style="font-size: 0.8rem; color: var(--accent-pink); font-style: italic;">
+                        *Đầu ra AI: Định nghĩa rập khuôn, lý thuyết bách khoa khó hiểu đối với sinh viên năm nhất.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week 4 Detail Modal -->
+    <div class="detail-modal" id="week4-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeDetailModal('week4-modal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="panel-header">
+                <span class="panel-week">Tuần 4 &bull; Hợp tác trực tuyến & Quản trị</span>
+                <h2 class="panel-title" style="color: #fff;">Quản trị Dự án nhóm đồng bộ</h2>
+            </div>
+            <div>
+                <p class="desc-text">
+                    Đóng vai trò là trưởng mảng tiến độ và quản lý không gian lưu trữ số cho dự án nhóm: <span class="highlight">"Khảo sát xu hướng ứng dụng công nghệ số tự học kỹ năng Nghe - Nói tại ULIS"</span>, tôi đã thiết lập hệ sinh thái làm việc đồng bộ:
+                </p>
+                <div class="kanban-board">
+                    <div class="kanban-col">
+                        <div class="kanban-col-title">Trello (Kanban) <i class="fa-solid fa-list-check"></i></div>
+                        <div class="kanban-card">Thiết kế Slide / Infographic</div>
+                        <div class="kanban-card" style="border-left: 3px solid var(--accent-pink);">Review và chốt kịch bản Final</div>
+                    </div>
+                    <div class="kanban-col">
+                        <div class="kanban-col-title">Google Docs <i class="fa-regular fa-file-lines"></i></div>
+                        <div class="kanban-card">Biên soạn nội dung đề cương chương 2</div>
+                        <div class="kanban-card">Sửa lỗi định dạng, góp ý văn phong khoa học</div>
+                    </div>
+                    <div class="kanban-col">
+                        <div class="kanban-col-title">Google Drive & Discord <i class="fa-solid fa-network-wired"></i></div>
+                        <div class="kanban-card">Phân cấp thư mục, kiểm soát cấu trúc lưu trữ</div>
+                        <div class="kanban-card">Setup Trello Bot thông báo tự động sang Discord</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week 5 Detail Modal -->
+    <div class="detail-modal" id="week5-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeDetailModal('week5-modal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="panel-header">
+                <span class="panel-week">Tuần 5 &bull; Sáng tạo truyền thông AI</span>
+                <h2 class="panel-title" style="color: #fff;">Sự kết hợp giữa AI và Con người</h2>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <p class="desc-text">
+                        Tôi đã phối hợp đồng bộ 3 công cụ AI để thiết kế bộ ấn phẩm truyền thông chuyên nghiệp: <span class="highlight">"Phương pháp học từ vựng tiếng Anh qua sơ đồ tư duy kỹ thuật số"</span>.
+                    </p>
+                    <p class="desc-text">
+                        - <strong style="color: #fff;">Google Gemini:</strong> Đóng vai trò trợ lý cấu trúc khung bài thuyết trình.<br>
+                        - <strong style="color: #fff;">Banana Pro:</strong> Tạo dựng mô hình biểu tượng 3D não bộ kết nối học thuật.<br>
+                        - <strong style="color: #fff;">Canva AI (Magic Design):</strong> Đề xuất bố cục, điều chỉnh phông chữ Unicode đồng bộ.
+                    </p>
+                </div>
+                <div class="infographic-wrapper">
+                    <div class="donut-chart">
+                        <svg class="chart-svg" width="180" height="180" viewBox="0 0 36 36">
+                            <path class="chart-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#221120" stroke-width="3" />
+                            <path class="chart-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#pinkGrad)" stroke-width="3" stroke-dasharray="60, 100" />
+                            <defs>
+                                <linearGradient id="pinkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#d97ea6" />
+                                    <stop offset="100%" stop-color="#9a66ac" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="chart-number">
+                            <div class="chart-val">60%</div>
+                            <div class="chart-lbl">Chất xám Con người</div>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <h5 style="color:#fff; margin-bottom: 0.5rem;">Sự kiểm soát tỷ lệ đóng góp</h5>
+                        <p class="desc-text" style="font-size:0.85rem;">
+                            Đầu ra của AI chỉ chiếm dưới <span class="highlight">40%</span>. Tôi trực tiếp rà soát, tinh giản 40% chữ thừa từ AI, chỉnh sửa lỗi phông tiếng Việt, căn lề thủ công để thổi hồn vào tác phẩm Infographic hoàn thiện.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Week 6 Detail Modal -->
+    <div class="detail-modal" id="week6-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeDetailModal('week6-modal')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="panel-header">
+                <span class="panel-week">Tuần 6 &bull; Chính sách AI & Đạo đức học thuật</span>
+                <h2 class="panel-title" style="color: #fff;">05 Nguyên tắc sử dụng AI có trách nhiệm</h2>
+            </div>
+            <div>
+                <p class="desc-text">
+                    Trong quá trình học tập, tôi luôn nghiêm ngặt tuân thủ và vận dụng bộ khung chính sách sử dụng AI có trách nhiệm của các cơ sở giáo dục. Tôi đã tổng hợp thành <span class="highlight">05 nguyên tắc vàng</span> cốt lõi trong sơ đồ tư duy đạo đức học thuật của riêng mình:
+                </p>
+                <div class="rules-grid">
+                    <div class="rule-card">
+                        <div class="rule-num">01</div>
+                        <h4 style="color:#fff; margin-bottom:0.5rem;">Nguyên bản</h4>
+                        <p class="desc-text" style="font-size:0.8rem; margin:0;">Tự tư duy và hình thành quan điểm độc lập trước khi tìm kiếm gợi ý từ AI.</p>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-num">02</div>
+                        <h4 style="color:#fff; margin-bottom:0.5rem;">Minh bạch</h4>
+                        <p class="desc-text" style="font-size:0.8rem; margin:0;">Chủ động công khai mức độ và danh mục các công cụ AI hỗ trợ trong nghiên cứu.</p>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-num">03</div>
+                        <h4 style="color:#fff; margin-bottom:0.5rem;">Thẩm định</h4>
+                        <p class="desc-text" style="font-size:0.8rem; margin:0;">Xác thực lại toàn bộ dữ liệu, nguồn dẫn do AI cung cấp bằng tài liệu chính thống.</p>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-num">04</div>
+                        <h4 style="color:#fff; margin-bottom:0.5rem;">Kiểm soát</h4>
+                        <p class="desc-text" style="font-size:0.8rem; margin:0;">Giữ vai trò "chủ đạo" của con người với tỷ lệ chất xám đóng góp trên 70%.</p>
+                    </div>
+                    <div class="rule-card">
+                        <div class="rule-num">05</div>
+                        <h4 style="color:#fff; margin-bottom:0.5rem;">Phát triển</h4>
+                        <p class="desc-text" style="font-size:0.8rem; margin:0;">Sử dụng công nghệ làm bàn đạp mài sắc tư duy phản biện, tránh ỷ lại vô điều kiện.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1073,47 +1224,27 @@
         animateParticles();
 
         // 2. Global Panel Switching Logic
-        function switchPanel(panelId, dockElement) {
-            // Remove active class from all panels
+        function switchPanel(panelId) {
             document.querySelectorAll('.section-panel').forEach(panel => {
                 panel.classList.remove('active');
             });
-            // Show target panel
             const targetPanel = document.getElementById(`panel-${panelId}`);
             if (targetPanel) {
                 targetPanel.classList.add('active');
-            }
-
-            // Update bottom dock active states
-            if (dockElement) {
-                document.querySelectorAll('.dock-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                dockElement.classList.add('active');
             }
         }
 
         // Navigation Controller based on Pill Header tabs
         function switchHeaderTab(tabId, element) {
-            // Handle header visual active link states
             document.querySelectorAll('.pill-nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             element.classList.add('active');
 
-            const bottomDock = document.getElementById('bottom-dock-bar');
-
             if (tabId === 'home') {
-                bottomDock.style.display = 'none';
-                switchPanel('home', null);
+                switchPanel('home');
             } else if (tabId === 'week1') {
-                // Show bottom weeks selection and default to Week 1
-                bottomDock.style.display = 'block';
-                switchPanel('week1', document.getElementById('dock-w1'));
-            } else if (tabId === 'week6') {
-                // Hide bottom selector and jump to Week 6
-                bottomDock.style.display = 'none';
-                switchPanel('week6', null);
+                switchPanel('week1');
             }
         }
 
@@ -1123,6 +1254,20 @@
         }
         function closeContactModal(event) {
             document.getElementById('contact-overlay').classList.remove('active');
+        }
+
+        // --- DETAILED WORKSPACE CARD MODALS (BÀI TẬP TAB OVERLAY LOGIC) ---
+        function openDetailModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+        function closeDetailModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+            }
         }
 
         // 3. Week 1: Virtual File Operations simulator
@@ -1156,7 +1301,6 @@
         };
 
         function switchPrompt(tab, version) {
-            // Remove active state from prompts sibling tabs
             const parent = tab.parentElement;
             parent.querySelectorAll('.prompt-tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
@@ -1164,7 +1308,6 @@
             const view = document.getElementById('prompt-content-view');
             const desc = document.getElementById('prompt-result-desc');
             
-            // Apply slight fade-out effect during text switch
             view.style.opacity = 0;
             setTimeout(() => {
                 view.textContent = prompts[version].text;
