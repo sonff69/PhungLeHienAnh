@@ -194,7 +194,7 @@
             gap: 0.5rem;
         }
 
-        /* Right Side: Dreamy Avatar Frame */
+        /* Right Side: Dreamy Avatar Frame - FIXED STATIC FRAME & FILL IMAGE */
         .avatar-column {
             display: flex;
             justify-content: center;
@@ -203,25 +203,25 @@
         }
         .avatar-frame {
             position: relative;
-            width: 320px;
-            height: 320px;
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            width: 300px;
+            height: 380px; /* Elegant vertical proportions */
+            border-radius: 24px; /* Static rounded corners */
             background: linear-gradient(45deg, var(--accent-pink), var(--accent-purple));
-            padding: 5px;
+            padding: 4px; /* Border outline effect */
             box-shadow: 0 15px 40px var(--accent-glow);
-            animation: blobby 12s ease-in-out infinite alternate;
             overflow: hidden;
             transition: var(--transition);
         }
         .avatar-frame:hover {
-            transform: scale(1.03) rotate(2deg);
-            box-shadow: 0 20px 50px rgba(217, 126, 166, 0.5);
+            transform: translateY(-5px); /* Gentle static lift on hover */
+            box-shadow: 0 20px 50px rgba(217, 126, 166, 0.4);
         }
         .avatar-img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: inherit;
+            object-fit: cover; /* Image fills the container completely and scales beautifully */
+            border-radius: 20px; /* Slight offset to match parent curvature */
+            display: block;
             background: #231221;
         }
         /* Decorative blurred glowing orbs */
@@ -245,13 +245,6 @@
             background: var(--accent-purple);
             bottom: -50px;
             left: -50px;
-        }
-
-        /* Floating Blob Animation */
-        @keyframes blobby {
-            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            50% { border-radius: 70% 30% 30% 70% / 70% 30% 70% 30%; }
-            100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
         }
 
         /* Cards/Lessons Section */
@@ -630,7 +623,7 @@
                         </div>
                     </div>
 
-                    <!-- Right Side: Avatar Column -->
+                    <!-- Right Side: Avatar Column - FIXED TO STATIC FILL -->
                     <div class="avatar-column">
                         <div class="avatar-frame">
                             <img src="Hình 1.jpg" alt="Phùng Lê Hiền Anh" class="avatar-img" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'">
@@ -807,7 +800,7 @@
                                 <div class="chart-lbl">Chất xám Con người</div>
                             </div>
                         </div>
-                        <div style="flex-1: 1;">
+                        <div style="flex: 1;">
                             <h5 style="color:#fff; margin-bottom: 0.5rem;">Sự kết hợp giữa AI và Đóng góp cá nhân</h5>
                             <p class="desc-text" style="font-size:0.85rem;">
                                 Đầu ra của AI chỉ chiếm dưới <span class="highlight">40%</span>. Tôi trực tiếp rà soát, tinh giản 40% chữ thừa từ AI, chỉnh sửa lỗi phông tiếng Việt, căn lề thủ công để thổi hồn vào tác phẩm Infographic hoàn thiện.
