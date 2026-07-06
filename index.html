@@ -77,66 +77,102 @@
             justify-content: space-between;
         }
 
-        /* Header Style */
-        header {
+        /* Floating Pill-Shaped Header Container (EXACT STYLE FROM SCREENSHOT) */
+        .pill-header-container {
+            position: sticky;
+            top: 1.5rem;
+            z-index: 1000;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 2rem auto;
+            padding: 0 1rem;
+        }
+        .pill-header {
+            background: rgba(255, 255, 255, 0.92); /* Soft white glass background */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50px; /* Perfect pill shape */
+            padding: 0.6rem 2.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--glass-border);
-            margin-bottom: 2rem;
-        }
-        .logo-group {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--accent-pink), var(--accent-purple));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-        .logo-text h1 {
-            font-family: var(--font-sans);
-            font-size: 1.2rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .logo-text p {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        /* Menu / Action Buttons */
-        .nav-actions {
-            display: flex;
-            gap: 1rem;
-        }
-        .btn-drive {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(217, 126, 166, 0.15);
-            border: 1px solid rgba(217, 126, 166, 0.3);
-            padding: 0.6rem 1.2rem;
-            border-radius: 30px;
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
             transition: var(--transition);
         }
-        .btn-drive:hover {
-            background: rgba(217, 126, 166, 0.3);
-            box-shadow: 0 0 20px rgba(217, 126, 166, 0.4);
-            transform: translateY(-2px);
+        .pill-header:hover {
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.12);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Logo 'hien anh.' - Lowercase Serif precisely styled */
+        .brand-logo {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #d04a7c; /* Elegant deep rose color */
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .brand-logo:hover {
+            opacity: 0.8;
+        }
+
+        /* Navigation Links in Pill Header */
+        .pill-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .pill-nav-link {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #4a3e4d; /* Muted dark text for legibility */
+            text-decoration: none;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .pill-nav-link:hover, .pill-nav-link.active {
+            color: #d04a7c;
+        }
+        .pill-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: #d04a7c;
+            transition: var(--transition);
+        }
+        .pill-nav-link:hover::after, .pill-nav-link.active::after {
+            width: 15px;
+        }
+
+        /* Capsule CTA Button on the right */
+        .pill-cta {
+            background: #f19fb1; /* Warm rose coral tone */
+            color: #fff;
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.7rem 1.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(241, 159, 177, 0.3);
+            transition: var(--transition);
+        }
+        .pill-cta:hover {
+            background: #e58a9e;
+            box-shadow: 0 6px 15px rgba(241, 159, 177, 0.5);
+            transform: scale(1.02);
         }
 
         /* Hero Split Section */
@@ -488,7 +524,7 @@
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1000;
+            z-index: 999;
             width: 90%;
             max-width: 650px;
         }
@@ -559,6 +595,58 @@
             transform: translateY(0);
         }
 
+        /* Contact Info Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 5, 15, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .contact-modal {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+        .modal-overlay.active .contact-modal {
+            transform: translateY(0);
+        }
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modal-close:hover {
+            color: var(--accent-pink);
+            transform: rotate(90deg);
+        }
+
         /* General Utilities */
         p.desc-text {
             color: var(--text-muted);
@@ -577,26 +665,29 @@
     <!-- Sparkle Canvas Background -->
     <canvas id="sparkle-canvas"></canvas>
 
+    <!-- Pill-Shaped Floating Header Container (MATCHES SCREENSHOT) -->
+    <div class="pill-header-container">
+        <header class="pill-header">
+            <!-- Lowercase Serif Logo -->
+            <a class="brand-logo" onclick="switchHeaderTab('home', document.querySelector('.pill-nav-link'))">hien anh.</a>
+            
+            <!-- Capsule Menu Items -->
+            <nav class="pill-nav">
+                <span class="pill-nav-link active" onclick="switchHeaderTab('home', this)">Giới Thiệu</span>
+                <span class="pill-nav-link" onclick="switchHeaderTab('week1', this)">Bài Tập</span>
+                <span class="pill-nav-link" onclick="switchHeaderTab('week6', this)">Tổng Kết</span>
+                <span class="pill-nav-link" onclick="openContactModal()">Liên Hệ</span>
+            </nav>
+            
+            <!-- Capsule Pink CTA Button -->
+            <a href="https://drive.google.com/drive/folders/1OJKLP8QceDCnHuGq_fn6KzbhrgpJHc6d?usp=drive_link" target="_blank" class="pill-cta">Xem bài tập GG Drive</a>
+        </header>
+    </div>
+
     <div class="app-container">
         <!-- Floating Blurred Orbs for Dreamy atmosphere -->
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
-
-        <!-- Top Menu Header -->
-        <header>
-            <div class="logo-group">
-                <div class="logo-icon">HA</div>
-                <div class="logo-text">
-                    <h1>Phùng Lê Hiền Anh</h1>
-                    <p>Digital Portfolio &bull; VNU-ULIS Student</p>
-                </div>
-            </div>
-            <div class="nav-actions">
-                <a href="https://drive.google.com/drive/folders/1OJKLP8QceDCnHuGq_fn6KzbhrgpJHc6d?usp=drive_link" target="_blank" class="btn-drive">
-                    <i class="fa-brands fa-google-drive"></i> Xem bài tập trên GG drive
-                </a>
-            </div>
-        </header>
 
         <!-- Main Workspace Area -->
         <main>
@@ -617,7 +708,7 @@
                         </div>
                         <div style="margin-top: 1.5rem;">
                             <!-- Link directly to Drive before assignments -->
-                            <a href="https://drive.google.com/drive/folders/1OJKLP8QceDCnHuGq_fn6KzbhrgpJHc6d?usp=drive_link" target="_blank" class="btn-drive">
+                            <a href="https://drive.google.com/drive/folders/1OJKLP8QceDCnHuGq_fn6KzbhrgpJHc6d?usp=drive_link" target="_blank" class="pill-cta" style="box-shadow: none;">
                                 <i class="fa-solid fa-folder-open"></i> Thư mục học tập lớn trên Google Drive
                             </a>
                         </div>
@@ -810,7 +901,7 @@
                 </div>
             </div>
 
-            <!-- WEEK 6 PANEL -->
+            <!-- WEEK 6 PANEL (Ethics & Rules) -->
             <div id="panel-week6" class="section-panel">
                 <div class="panel-header">
                     <span class="panel-week">Tuần 6 &bull; Bài tập 4</span>
@@ -851,38 +942,62 @@
             </div>
         </main>
 
-        <!-- Bottom macOS Style Floating Navigation Dock -->
-        <div class="bottom-dock-container">
+        <!-- Bottom macOS Style Floating Navigation Dock (For Weeks Swapping) -->
+        <div class="bottom-dock-container" id="bottom-dock-bar" style="display: none;">
             <nav class="bottom-dock">
-                <button class="dock-item active" onclick="switchPanel('home', this)">
-                    <i class="fa-solid fa-house"></i>
-                    <span class="dock-tooltip">Trang chủ</span>
-                </button>
-                <button class="dock-item" onclick="switchPanel('week1', this)">
+                <button class="dock-item active" id="dock-w1" onclick="switchPanel('week1', this)">
                     <i class="fa-solid fa-folder"></i>
-                    <span class="dock-tooltip">Tuần 1: File & Folder</span>
+                    <span class="dock-tooltip">T1: File & Folder</span>
                 </button>
                 <button class="dock-item" onclick="switchPanel('week2', this)">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <span class="dock-tooltip">Tuần 2: Tìm kiếm</span>
+                    <span class="dock-tooltip">T2: Tìm kiếm</span>
                 </button>
                 <button class="dock-item" onclick="switchPanel('week3', this)">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span class="dock-tooltip">Tuần 3: Prompt Eng</span>
+                    <span class="dock-tooltip">T3: Prompt Eng</span>
                 </button>
                 <button class="dock-item" onclick="switchPanel('week4', this)">
                     <i class="fa-solid fa-users-gear"></i>
-                    <span class="dock-tooltip">Tuần 4: Dự án nhóm</span>
+                    <span class="dock-tooltip">T4: Dự án nhóm</span>
                 </button>
                 <button class="dock-item" onclick="switchPanel('week5', this)">
                     <i class="fa-solid fa-palette"></i>
-                    <span class="dock-tooltip">Tuần 5: Generative AI</span>
-                </button>
-                <button class="dock-item" onclick="switchPanel('week6', this)">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span class="dock-tooltip">Tuần 6: Đạo đức AI</span>
+                    <span class="dock-tooltip">T5: Sáng tạo AI</span>
                 </button>
             </nav>
+        </div>
+    </div>
+
+    <!-- Floating Contact Modal Overlay -->
+    <div class="modal-overlay" id="contact-overlay" onclick="closeContactModal(event)">
+        <div class="contact-modal" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeContactModal(event)"><i class="fa-solid fa-xmark"></i></button>
+            <h3 style="font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 1.5rem; color: #fff; text-align: center;">Liên Hệ</h3>
+            <div style="display: flex; flex-direction: column; gap: 1.2rem;">
+                <p class="desc-text" style="text-align: center; margin: 0;">Rất vui được kết nối với bạn qua các nền tảng số!</p>
+                <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.03); padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <i class="fa-solid fa-envelope" style="color: var(--accent-pink); font-size: 1.2rem;"></i>
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Email liên lạc</div>
+                        <div style="font-size: 0.9rem; color: #fff;">hienanh.phung@ulis.vnu.edu.vn</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.03); padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <i class="fa-solid fa-graduation-cap" style="color: var(--accent-pink); font-size: 1.2rem;"></i>
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Học tập tại</div>
+                        <div style="font-size: 0.9rem; color: #fff;">Trường ĐH Ngoại ngữ - ĐHQGHN</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.03); padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                    <i class="fa-solid fa-address-card" style="color: var(--accent-pink); font-size: 1.2rem;"></i>
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Mã số sinh viên</div>
+                        <div style="font-size: 0.9rem; color: #fff;">25040456</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -957,23 +1072,57 @@
         }
         animateParticles();
 
-        // 2. Tab Navigation Switcher Logic
-        function switchPanel(panelId, element) {
+        // 2. Global Panel Switching Logic
+        function switchPanel(panelId, dockElement) {
             // Remove active class from all panels
             document.querySelectorAll('.section-panel').forEach(panel => {
                 panel.classList.remove('active');
             });
-            // Show the target panel
+            // Show target panel
             const targetPanel = document.getElementById(`panel-${panelId}`);
             if (targetPanel) {
                 targetPanel.classList.add('active');
             }
 
-            // Update active state in bottom dock navigation
-            document.querySelectorAll('.dock-item').forEach(item => {
-                item.classList.remove('active');
+            // Update bottom dock active states
+            if (dockElement) {
+                document.querySelectorAll('.dock-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                dockElement.classList.add('active');
+            }
+        }
+
+        // Navigation Controller based on Pill Header tabs
+        function switchHeaderTab(tabId, element) {
+            // Handle header visual active link states
+            document.querySelectorAll('.pill-nav-link').forEach(link => {
+                link.classList.remove('active');
             });
             element.classList.add('active');
+
+            const bottomDock = document.getElementById('bottom-dock-bar');
+
+            if (tabId === 'home') {
+                bottomDock.style.display = 'none';
+                switchPanel('home', null);
+            } else if (tabId === 'week1') {
+                // Show bottom weeks selection and default to Week 1
+                bottomDock.style.display = 'block';
+                switchPanel('week1', document.getElementById('dock-w1'));
+            } else if (tabId === 'week6') {
+                // Hide bottom selector and jump to Week 6
+                bottomDock.style.display = 'none';
+                switchPanel('week6', null);
+            }
+        }
+
+        // Contact Modal Logic
+        function openContactModal() {
+            document.getElementById('contact-overlay').classList.add('active');
+        }
+        function closeContactModal(event) {
+            document.getElementById('contact-overlay').classList.remove('active');
         }
 
         // 3. Week 1: Virtual File Operations simulator
